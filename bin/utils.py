@@ -3,20 +3,29 @@ from bin.config import *
 
 
 def get_all_images(path):
-    all_files = os.listdir(path)
-    all_images = []
-    for eachfile in all_files:
-        if eachfile.endswith(".jpeg") or eachfile.endswith(".tif") or eachfile.endswith(".jpg"):
-            if len(eachfile.split('_')) == 5:
-                all_images.append(eachfile)
+    try:
+        logger.info("\tFUNCTION CALLED: get_all_images()")
+        all_files = os.listdir(path)
+        all_images = []
+        for eachfile in all_files:
+            if eachfile.endswith(".jpeg") or eachfile.endswith(".tif") or eachfile.endswith(".jpg"):
+                if len(eachfile.split('_')) == 5:
+                    all_images.append(eachfile)
 
-    return all_images
+        logger.info("\t\tRETURNING LIST OF " + str(len(all_images)))
+        return all_images
+    except Exception as e:
+        print("WARNING: NO IMAGES FOUND \n" + str(e))
+        logger.error("\t\tERROR: " + str(e))
+        logger.info("\t\treturning blank list")
+        all_images = []
+        return all_images
 
 
 class Voucher:
     def __init__(self, name):
         self.fileName = name
-        self.fileAddr = vouchers_path + self.fileName
+        self.fileAddr = os.path.join(vouchers_path, self.fileName)
         self.empID, self.page = self.scrap_name()
         print("Working on file:", self.fileName)
 
